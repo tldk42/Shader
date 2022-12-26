@@ -108,6 +108,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -124,25 +125,28 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>d3d11.lib;dxgi.lib;dxguid.lib;d3dcompiler.lib;winmm.lib;comctl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Shader\D3D.h" />
+    <ClInclude Include="src\Shader\Graphic.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="src\Shader\Input.h" />
     <ClInclude Include="src\Shader\framework.h" />
     <ClInclude Include="src\Shader\Resource.h" />
-    <ClInclude Include="src\Shader\Shader.h" />
     <ClInclude Include="src\Shader\targetver.h" />
     <ClInclude Include="src\Shader\System.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Shader\Application.cpp" />
+    <ClCompile Include="src\Shader\D3D.cpp" />
+    <ClCompile Include="src\Shader\Graphic.cpp" />
+    <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\Shader\Input.cpp" />
-    <ClCompile Include="src\Shader\Shader.cpp" />
     <ClCompile Include="src\Shader\System.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Shader.rc" />
+    <ResourceCompile Include="src\Shader\Shader.rc" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Shader.ico" />

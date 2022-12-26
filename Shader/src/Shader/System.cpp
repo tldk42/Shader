@@ -1,13 +1,15 @@
 #include "System.h"
 #include "Input.h"
-#include "resource.h"
+#include "Graphic.h"
+#include "Resource.h"
 
 const char* System::APPNAME = "Jacob's Shader Engine";
 
 System::System()
 	: mHinstance(nullptr),
-	mHwnd(nullptr),
-	mInput(nullptr)
+	  mHwnd(nullptr),
+	  mInput(nullptr),
+	  mGraphic(nullptr)
 {
 }
 
@@ -18,7 +20,6 @@ bool System::Initialize()
 
 	InitializeWindow(screenWidth, screenHeight);
 
-
 	// Initialize All thing (D3D)
 	mInput = new Input;
 	if (!mInput)
@@ -26,6 +27,19 @@ bool System::Initialize()
 		return false;
 	}
 	mInput->Initialize();
+
+	mGraphic = new Graphic;
+	if (!mGraphic)
+	{
+		return false;
+	}
+
+	if (!mGraphic->Initialize(screenWidth, screenHeight, mHwnd))
+	{
+		return false;
+	}
+
+	return true;
 
 
 	return true;
@@ -39,11 +53,16 @@ void System::Exit()
 		mInput = nullptr;
 	}
 
+	if (mGraphic)
+	{
+		delete mGraphic;
+		mGraphic = nullptr;
+	}
 
 	ExitWindow();
 }
 
-void System::Run()
+void System::Run() const
 {
 	// Message Loop
 	MSG msg;
@@ -59,6 +78,7 @@ void System::Run()
 		else
 		{
 			// PlayDemo
+			mGraphic->RenderFrame();
 		}
 	}
 }
@@ -89,7 +109,8 @@ LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	case WM_COMMAND:
 		{
 			int wmId = LOWORD(wParam);
-			switch (wmId) {
+			switch (wmId)
+			{
 			case IDM_ABOUT:
 				DialogBox(mHinstance, MAKEINTRESOURCE(IDD_ABOUTBOX), mHwnd, About);
 				break;
@@ -155,7 +176,7 @@ void System::InitializeWindow(int& width, int& height)
 	RegisterClassEx(&wc);
 #pragma endregion 창 클래스 등록
 
-	DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+	DWORD style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX;
 	mHwnd = CreateWindow(
 		APPNAME,
 		APPNAME,
@@ -171,8 +192,26 @@ void System::InitializeWindow(int& width, int& height)
 
 	POINT ptDiff;
 	RECT rcClient, rcWindow;
-	width = 1600;
-	height = 900;
+	if (FULL_SCREEN)
+	{
+		DEVMODE dmScreenSettings;
+		width = GetSystemMetrics(SM_CXSCREEN);
+		height = GetSystemMetrics(SM_CYSCREEN);
+		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
+		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
+		dmScreenSettings.dmPelsWidth = (unsigned long)width;
+		dmScreenSettings.dmPelsHeight = (unsigned long)height;
+		dmScreenSettings.dmBitsPerPel = 32;
+		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
+
+		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
+	}
+	else
+	{
+		width = 1600;
+		height = 900;
+	}
+
 
 	GetClientRect(mHwnd, &rcClient);
 	GetWindowRect(mHwnd, &rcWindow);

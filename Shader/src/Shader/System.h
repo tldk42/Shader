@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Windows.h>
+#include "framework.h"
 
 class System
 {
@@ -10,7 +10,7 @@ public:
 
 	bool Initialize();
 	void Exit();
-	void Run();
+	void Run() const;
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
@@ -26,6 +26,7 @@ private:
 	HWND mHwnd;
 
 	class Input* mInput;
+	class Graphic* mGraphic;
 };
 
 static LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
