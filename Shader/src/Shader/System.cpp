@@ -15,6 +15,8 @@ System::System()
 
 bool System::Initialize()
 {
+	Log::Init();
+
 	int screenWidth = 0;
 	int screenHeight = 0;
 
@@ -38,9 +40,8 @@ bool System::Initialize()
 	{
 		return false;
 	}
-
-	return true;
-
+	JC_CORE_INFO("Initialized Log");
+	JC_ERROR("KINGKUNTA");
 
 	return true;
 }
