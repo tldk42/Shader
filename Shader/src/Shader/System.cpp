@@ -41,7 +41,6 @@ bool System::Initialize()
 		return false;
 	}
 	JC_CORE_INFO("Initialized Log");
-	JC_ERROR("KINGKUNTA");
 
 	return true;
 }
@@ -65,9 +64,8 @@ void System::Exit()
 
 void System::Run() const
 {
-	// Message Loop
 	MSG msg;
-	ZeroMemory(&msg, sizeof(msg)); // Init
+	ZeroMemory(&msg, sizeof(msg));
 
 	while (msg.message != WM_QUIT)
 	{
@@ -78,7 +76,6 @@ void System::Run() const
 		}
 		else
 		{
-			// PlayDemo
 			mGraphic->RenderFrame();
 		}
 	}
@@ -200,8 +197,8 @@ void System::InitializeWindow(int& width, int& height)
 		height = GetSystemMetrics(SM_CYSCREEN);
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
-		dmScreenSettings.dmPelsWidth = (unsigned long)width;
-		dmScreenSettings.dmPelsHeight = (unsigned long)height;
+		dmScreenSettings.dmPelsWidth = static_cast<unsigned long>(width);
+		dmScreenSettings.dmPelsHeight = static_cast<unsigned long>(height);
 		dmScreenSettings.dmBitsPerPel = 32;
 		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 

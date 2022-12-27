@@ -42,6 +42,15 @@
     <ClInclude Include="src\Shader\Log.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="src\Shader\Model.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader\ColorShader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Shader\Camera.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Shader\Input.cpp">
@@ -62,6 +71,15 @@
     <ClCompile Include="src\Shader\Log.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="src\Shader\Model.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader\ColorShader.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Shader\Camera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="src\Shader\Shader.rc">
@@ -75,5 +93,9 @@
     <Image Include="Shader.ico">
       <Filter>리소스 파일</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Assets\Vertex\Color.vs" />
+    <None Include="src\Assets\Pixel\Color.ps" />
   </ItemGroup>
 </Project>

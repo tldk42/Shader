@@ -137,6 +137,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Shader\Camera.h" />
+    <ClInclude Include="src\Shader\ColorShader.h" />
+    <ClInclude Include="src\Shader\Model.h" />
     <ClInclude Include="src\Shader\Log.h" />
     <ClInclude Include="src\Shader\D3D.h" />
     <ClInclude Include="src\Shader\Graphic.h" />
@@ -148,6 +151,9 @@
     <ClInclude Include="src\Shader\System.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Shader\Camera.cpp" />
+    <ClCompile Include="src\Shader\ColorShader.cpp" />
+    <ClCompile Include="src\Shader\Model.cpp" />
     <ClCompile Include="src\Shader\Log.cpp" />
     <ClCompile Include="src\Shader\D3D.cpp" />
     <ClCompile Include="src\Shader\Graphic.cpp" />
@@ -161,6 +167,10 @@
   <ItemGroup>
     <Image Include="Shader.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\Assets\Pixel\Color.ps" />
+    <None Include="src\Assets\Vertex\Color.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

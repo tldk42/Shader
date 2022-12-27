@@ -3,7 +3,9 @@
 #include "D3D.h"
 
 static bool FULL_SCREEN = false;
-const bool VSYNC_ENABLED = true;
+static bool VSYNC_ENABLED = true;
+static float SCREEN_DEPTH = 1000.0f;
+static float SCREEN_NEAR = 0.1f;
 
 class Graphic
 {
@@ -15,12 +17,15 @@ public:
 	bool Initialize(float, float, HWND);
 	void Clear();
 
-	void RenderFrame();
+	bool RenderFrame();
 
 private:
 	void RenderScene();
 	void RenderInfo();
 private:
 	D3D* mD3D;
+	class Camera* mCamera;
+	class Model* mModel;
+	class ColorShader* mColorShader;
 };
 

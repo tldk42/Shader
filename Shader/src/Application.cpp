@@ -1,5 +1,8 @@
 #include "Shader/System.h"
+
+#ifdef _DEBUG
 #pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#endif
 
 int APIENTRY wWinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPWSTR, _In_ int)
 {
