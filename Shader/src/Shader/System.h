@@ -2,6 +2,8 @@
 
 #include "framework.h"
 
+static const char* graphicCard;
+
 class System
 {
 public:
@@ -10,7 +12,7 @@ public:
 
 	bool Initialize();
 	void Exit();
-	void Run() const;
+	void Run();
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 
@@ -25,6 +27,7 @@ private:
 	HINSTANCE mHinstance;
 	HWND mHwnd;
 
+	class ImGuiManager* mImGui;
 	class Input* mInput;
 	class Graphic* mGraphic;
 };

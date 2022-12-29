@@ -112,6 +112,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -127,6 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -137,8 +139,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Shader\ImGuiManager.h" />
     <ClInclude Include="src\Shader\Camera.h" />
     <ClInclude Include="src\Shader\ColorShader.h" />
+    <ClInclude Include="src\Shader\ImGui\imconfig.h" />
+    <ClInclude Include="src\Shader\ImGui\imgui.h" />
+    <ClInclude Include="src\Shader\ImGui\imgui_impl_dx11.h" />
+    <ClInclude Include="src\Shader\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="src\Shader\ImGui\imgui_internal.h" />
+    <ClInclude Include="src\Shader\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="src\Shader\ImGui\imstb_textedit.h" />
+    <ClInclude Include="src\Shader\ImGui\imstb_truetype.h" />
     <ClInclude Include="src\Shader\Model.h" />
     <ClInclude Include="src\Shader\Log.h" />
     <ClInclude Include="src\Shader\D3D.h" />
@@ -151,8 +162,15 @@
     <ClInclude Include="src\Shader\System.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Shader\ImGuiManager.cpp" />
     <ClCompile Include="src\Shader\Camera.cpp" />
     <ClCompile Include="src\Shader\ColorShader.cpp" />
+    <ClCompile Include="src\Shader\ImGui\imgui.cpp" />
+    <ClCompile Include="src\Shader\ImGui\imgui_draw.cpp" />
+    <ClCompile Include="src\Shader\ImGui\imgui_impl_dx11.cpp" />
+    <ClCompile Include="src\Shader\ImGui\imgui_impl_win32.cpp" />
+    <ClCompile Include="src\Shader\ImGui\imgui_tables.cpp" />
+    <ClCompile Include="src\Shader\ImGui\imgui_widgets.cpp" />
     <ClCompile Include="src\Shader\Model.cpp" />
     <ClCompile Include="src\Shader\Log.cpp" />
     <ClCompile Include="src\Shader\D3D.cpp" />

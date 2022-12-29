@@ -1,5 +1,11 @@
 #include "Model.h"
 
+struct VertexType
+{
+	DirectX::XMFLOAT3 position;
+	DirectX::XMFLOAT4 color;
+};
+
 Model::Model()
 	: mVertexBuffer(nullptr),
 	  mIndexBuffer(nullptr),
@@ -10,11 +16,7 @@ Model::Model()
 
 bool Model::Initialize(ID3D11Device* device)
 {
-	bool result;
-
-
-	result = InitializeBuffers(device);
-	if (!result)
+	if (!InitializeBuffers(device))
 	{
 		return false;
 	}
@@ -49,7 +51,6 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 	D3D11_BUFFER_DESC indexBufferDesc;
 	D3D11_SUBRESOURCE_DATA vertexData;
 	D3D11_SUBRESOURCE_DATA indexData;
-	HRESULT result;
 
 	mVertexCount = 3;
 	mIndexCount = 3;
@@ -67,13 +68,13 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 	}
 
 	vertices[0].position = DirectX::XMFLOAT3(-1.f, -1.f, 0.f);	// Bottom Left
-	vertices[0].color = DirectX::XMFLOAT4(0.f, 0.f, 0.f, 1.f);
+	vertices[0].color = DirectX::XMFLOAT4(0.f, .8f, 0.f, 1.f);
 
 	vertices[1].position = DirectX::XMFLOAT3(0.0f, 1.0f, 0.0f);  // Top middle.
-	vertices[1].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[1].color = DirectX::XMFLOAT4(0.0f, .9f, 0.0f, 1.0f);
 
 	vertices[2].position = DirectX::XMFLOAT3(1.0f, -1.0f, 0.0f);  // Bottom right.
-	vertices[2].color = DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
+	vertices[2].color = DirectX::XMFLOAT4(0.0f, .0f, 0.0f, 1.0f);
 
 	indices[0] = 0;  // Bottom left.
 	indices[1] = 1;  // Top middle.
@@ -90,8 +91,7 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 	vertexData.SysMemPitch = 0;
 	vertexData.SysMemSlicePitch = 0;
 
-	result = device->CreateBuffer(&vertexBufferDesc, &vertexData, &mVertexBuffer);
-	if (FAILED(result))
+	if (FAILED(device->CreateBuffer(&vertexBufferDesc, &vertexData, &mVertexBuffer)))
 	{
 		return false;
 	}
@@ -107,8 +107,7 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 	indexData.SysMemPitch = 0;
 	indexData.SysMemSlicePitch = 0;
 
-	result = device->CreateBuffer(&indexBufferDesc, &indexData, &mIndexBuffer);
-	if (FAILED(result))
+	if (FAILED(device->CreateBuffer(&indexBufferDesc, &indexData, &mIndexBuffer)))
 	{
 		return false;
 	}
@@ -124,21 +123,17 @@ bool Model::InitializeBuffers(ID3D11Device* device)
 
 void Model::ShutdownBuffers()
 {
-	// Release the index buffer.
 	if (mIndexBuffer)
 	{
 		mIndexBuffer->Release();
 		mIndexBuffer = nullptr;
 	}
 
-	// Release the vertex buffer.
 	if (mVertexBuffer)
 	{
 		mVertexBuffer->Release();
 		mVertexBuffer = nullptr;
 	}
-
-	return;
 }
 
 void Model::RenderBuffers(ID3D11DeviceContext* deviceContext)
@@ -147,17 +142,13 @@ void Model::RenderBuffers(ID3D11DeviceContext* deviceContext)
 	unsigned int offset;
 
 
-	// Set vertex buffer stride and offset.
 	stride = sizeof(VertexType);
 	offset = 0;
 
-	// Set the vertex buffer to active in the input assembler so it can be rendered.
 	deviceContext->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
-	// Set the index buffer to active in the input assembler so it can be rendered.
 	deviceContext->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
-	// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	return;

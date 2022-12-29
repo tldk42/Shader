@@ -2,12 +2,15 @@
 #include "Input.h"
 #include "Graphic.h"
 #include "Resource.h"
+#include "ImGuiManager.h"
+#include "ImGui/imgui_impl_win32.h"
 
 const char* System::APPNAME = "Jacob's Shader Engine";
 
 System::System()
 	: mHinstance(nullptr),
 	  mHwnd(nullptr),
+	  mImGui(nullptr),
 	  mInput(nullptr),
 	  mGraphic(nullptr)
 {
@@ -15,20 +18,44 @@ System::System()
 
 bool System::Initialize()
 {
+#pragma region LOGGING
+
 	Log::Init();
+
+#pragma endregion LOGGING
+
+#pragma region WINDOW
 
 	int screenWidth = 0;
 	int screenHeight = 0;
 
 	InitializeWindow(screenWidth, screenHeight);
 
-	// Initialize All thing (D3D)
+#pragma endregion WINDOW
+
+#pragma region GUI
+
+	mImGui = new ImGuiManager;
+	if (!mImGui)
+	{
+		return false;
+	}
+	ImGui_ImplWin32_Init(mHwnd);
+
+#pragma endregion GUI
+
+#pragma region INPUT
+
 	mInput = new Input;
 	if (!mInput)
 	{
 		return false;
 	}
 	mInput->Initialize();
+
+#pragma endregion INPUT
+
+#pragma region GRAPHIC
 
 	mGraphic = new Graphic;
 	if (!mGraphic)
@@ -40,7 +67,12 @@ bool System::Initialize()
 	{
 		return false;
 	}
-	JC_CORE_INFO("Initialized Log");
+
+	graphicCard = mGraphic->GetGraphicCardDesc();
+
+#pragma endregion GRAPHIC
+
+	JC_CORE_WARN("Initialization COMPLETE");
 
 	return true;
 }
@@ -59,10 +91,12 @@ void System::Exit()
 		mGraphic = nullptr;
 	}
 
+	ImGui_ImplWin32_Shutdown();
+
 	ExitWindow();
 }
 
-void System::Run() const
+void System::Run()
 {
 	MSG msg;
 	ZeroMemory(&msg, sizeof(msg));
@@ -76,7 +110,7 @@ void System::Run() const
 		}
 		else
 		{
-			mGraphic->RenderFrame();
+			Frame();
 		}
 	}
 }
@@ -100,10 +134,40 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 	return (INT_PTR)FALSE;
 }
 
+INT_PTR CALLBACK GraphicCardINFO(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		SetDlgItemText(hDlg, IDC_STATIC, graphicCard);
+		return (INT_PTR)TRUE;
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
+
 LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+	case WM_SIZE:
+		if (mGraphic != nullptr && wParam != SIZE_MINIMIZED)
+		{
+			if (mGraphic->GetD3D() == nullptr)
+			{
+				return 0;
+			}
+			mGraphic->GetD3D()->ResizeSwapChain((UINT)LOWORD(lParam), (UINT)HIWORD(lParam));
+		}
+
+		return 0;
 	case WM_COMMAND:
 		{
 			int wmId = LOWORD(wParam);
@@ -115,8 +179,11 @@ LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			case IDM_EXIT:
 				DestroyWindow(mHwnd);
 				break;
+			case IDM_GRAPHIC:
+				DialogBox(mHinstance, MAKEINTRESOURCE(IDD_Graphic), mHwnd, GraphicCardINFO);
+				break;
 			}
-			break;
+			return 0;
 		}
 	case WM_PAINT:
 		{
@@ -124,7 +191,7 @@ LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			HDC hdc = BeginPaint(mHwnd, &ps);
 			// TODO: hdc 그리기 코드 추가
 			EndPaint(mHwnd, &ps);
-			break;
+			return 0;
 		}
 	case WM_KEYDOWN:
 		mInput->KeyDown(wParam);
@@ -143,6 +210,11 @@ LRESULT System::MessageHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 bool System::Frame()
 {
 	if (mInput->IsKeyDown(VK_ESCAPE) || mInput->IsKeyDown(VK_END))
+	{
+		return false;
+	}
+
+	if (!mGraphic->RenderFrame())
 	{
 		return false;
 	}
@@ -206,8 +278,8 @@ void System::InitializeWindow(int& width, int& height)
 	}
 	else
 	{
-		width = 1600;
-		height = 900;
+		width = 1200;
+		height = 800;
 	}
 
 
@@ -232,9 +304,14 @@ void System::ExitWindow()
 	gApplicationHandle = nullptr;
 }
 
-
+extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK MsgProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
+		return true;
+	}
+
 	switch (msg)
 	{
 	case WM_DESTROY:

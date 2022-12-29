@@ -12,7 +12,9 @@ public:
 	~Camera() = default;
 
 	void SetPosition(float, float, float);
+	void SetPosition(DirectX::XMFLOAT3);
 	void SetRotation(float, float, float);
+	void SetRotation(DirectX::XMFLOAT3);
 
 	void Render();
 

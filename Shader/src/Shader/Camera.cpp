@@ -18,11 +18,25 @@ void Camera::SetPosition(float x, float y, float z)
 	mPositionZ = z;
 }
 
+void Camera::SetPosition(DirectX::XMFLOAT3 vec)
+{
+	mPositionX = vec.x;
+	mPositionY = vec.y;
+	mPositionZ = vec.z;
+}
+
 void Camera::SetRotation(float x, float y, float z)
 {
 	mRotationX = x;
 	mRotationY = y;
 	mRotationZ = z;
+}
+
+void Camera::SetRotation(DirectX::XMFLOAT3 vec)
+{
+	mRotationX = vec.x;
+	mRotationY = vec.y;
+	mRotationZ = vec.z;
 }
 
 void Camera::Render()
@@ -35,18 +49,6 @@ void Camera::Render()
 	float pitch;
 	float roll;
 
-	// up.x = 0.f;
-	// up.y = 1.f;
-	// up.z = 0.f;
-
-	// position.x = mPositionX;
-	// position.y = mPositionY;
-	// position.z = mPositionZ;
-
-	// lookAt.x = 0.f;
-	// lookAt.y = 0.f;
-	// lookAt.z = 1.f;
-
 	pitch = mRotationX * RADIANS;
 	yaw = mRotationY * RADIANS;
 	roll = mRotationZ * RADIANS;
@@ -57,6 +59,7 @@ void Camera::Render()
 	DirectX::XMStoreFloat3(&up, DirectX::XMVector3TransformCoord(DirectX::XMLoadFloat3(&up), rotationMatrix));
 	DirectX::XMStoreFloat3(
 		&lookAt, DirectX::XMVectorAdd(DirectX::XMLoadFloat3(&lookAt), DirectX::XMLoadFloat3(&position)));
+
 	mViewMatrix = DirectX::XMMatrixLookAtLH(
 		DirectX::XMLoadFloat3(&position),
 		DirectX::XMLoadFloat3(&lookAt),

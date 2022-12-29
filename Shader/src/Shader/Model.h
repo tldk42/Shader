@@ -5,13 +5,6 @@
 
 class Model
 {
-private:
-	struct VertexType
-	{
-		DirectX::XMFLOAT3 position;
-		DirectX::XMFLOAT4 color;
-	};
-
 public:
 	Model();
 	Model(const Model&) = default;

@@ -16,8 +16,17 @@ public:
 
 	bool Initialize(float, float, HWND);
 	void Clear();
-
+	
 	bool RenderFrame();
+
+	inline const char* GetGraphicCardDesc() const
+	{
+		return mD3D->GetGraphicCardInfo();
+	}
+	inline D3D* GetD3D() const
+{
+		return mD3D;
+}
 
 private:
 	void RenderScene();

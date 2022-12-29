@@ -2,24 +2,15 @@
 
 #include <d3d11.h>
 #include <DirectXMath.h>
-#include <fstream>
 
 class ColorShader
 {
-private:
-	struct MatrixBufferType
-	{
-		DirectX::XMMATRIX world;
-		DirectX::XMMATRIX view;
-		DirectX::XMMATRIX projection;
-	};
-
 public:
 	ColorShader();
 	ColorShader(const ColorShader&) = default;
 	~ColorShader() = default;
 
-		bool Initialize(ID3D11Device*, HWND);
+	bool Initialize(ID3D11Device*, HWND);
 	void Shutdown();
 	bool Render(ID3D11DeviceContext*, int, DirectX::XMMATRIX, DirectX::XMMATRIX, DirectX::XMMATRIX);
 
@@ -32,9 +23,8 @@ private:
 	void RenderShader(ID3D11DeviceContext*, int);
 
 private:
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11PixelShader* m_pixelShader;
-	ID3D11InputLayout* m_layout;
-	ID3D11Buffer* m_matrixBuffer;;
+	ID3D11VertexShader* mVertexShader;
+	ID3D11PixelShader* mPixelShader;
+	ID3D11InputLayout* mLayout;
+	ID3D11Buffer* mMatrixBuffer;;
 };
-
